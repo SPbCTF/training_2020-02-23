@@ -1,0 +1,10 @@
+build/
+.gradle/
+.idea/
+*.iml
+nginx/
+out/
+target/
+local/
+/config.properties
+node_modules/

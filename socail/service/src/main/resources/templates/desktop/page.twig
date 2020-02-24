@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{%autoescape "html"%}<html>
+<head>
+	<!-- commercialized internet sucks ass -->
+	<title>{{ title }}</title>
+	<link rel="stylesheet" type="text/css" href="/res/style.css?{{staticHash}}"/>
+	{%if metaTags%}{%for key, value in metaTags%}<meta property="{{key}}" content="{{value}}"/>
+	{%endfor%}{%endif%}
+	<script>
+		var userConfig={{jsConfig | escape(false)}};
+		var langKeys={{jsLangKeys | escape(false)}};
+	</script>
+	<script src="/res/common.js?{{staticHash}}" async></script>
+</head>
+<body>
+<div class="headerBG"></div>
+<div class="wrap">
+<table width="100%" class="header" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td width="170" align="left">
+			<a href="/"><img src="/res/logo_white.svg" height="33" width="141" border="0" alt="A/D" class="logo"/></a>
+		</td>
+		<td align="right">
+			{% if (currentUser) %}
+			<a href="/account/logout?csrf={{ csrf }}" class="nav">{{ L("log_out") }}</a>
+			{% endif %}
+		</td>
+	</tr>
+</table>
+<table width="100%" class="contentWrap" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="170" class="leftMenu" valign="top">
+{%block leftMenu%}
+			{%if currentUser%}
+			<ul class="actionList">
+				<li><a href="/{{currentUser.username}}">{{L('menu_profile')}}</a></li>
+				<li><a href="/{{currentUser.username}}/friends">{{L('menu_friends')}}{%if(userNotifications.newFriendRequestCount>0)%} (<b>{{userNotifications.newFriendRequestCount}}</b>){%endif%}</a></li>
+				<li><a href="/feed">{{L('menu_news')}}</a></li>
+				<li><a href="/settings/">{{L('menu_settings')}}</a></li>
+			</ul>
+			{%else%}
+			<form action="/account/login" method="post">
+				{{ L("email_or_username") }}:<br/>
+				<input type="text" name="username"/><br/>
+				{{ L("password") }}:<br/>
+				<input type="password" name="password"/><br/>
+				<input type="submit" value="{{ L('log_in') }}"/>
+			</form>
+			{%endif%}
+{%endblock%}
+		</td>
+		<td valign="top">
+			<div class="pageContent">
+{%block content%}{%endblock%}
+			</div>
+		</td>
+	</tr>
+</table>
+</div>
+<!--a id="elevator" href="#">
+	up
+</a-->
+</body>
+</html>
+{%endautoescape%}

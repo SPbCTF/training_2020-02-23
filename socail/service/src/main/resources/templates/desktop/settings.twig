@@ -1,0 +1,77 @@
+{%extends "page.twig"%}
+{%block content%}
+<div class="singleColumn gray">
+<form action="/settings/updateName" method="post" onsubmit="return ajaxSubmitForm(this)">
+	<h2>{{L('change_name')}}</h2>
+	<div class="settingsMessage" id="nameMessage" style="{%if not nameMessage%}display: none{%endif%}">{{nameMessage}}</div>
+	<table class="form">
+		<tr><td class="label">{{L('first_name')}}:</td><td><input type="text" name="firstName" value="{{currentUser.firstName}}" maxlength="100" required/></td></tr>
+		<tr><td class="label">{{L('last_name')}}:</td><td><input type="text" name="lastName" value="{{currentUser.lastName}}" maxlength="100"/></td></tr>
+		<tr><td class="label">{{L('about')}}:</td><td><input type="text" name="about" value="{{currentUser.about}}" maxlength="32"/></td></tr>
+		{% if currentUser.privateProfile %}
+		    <tr><td class="label">{{L('private')}}:</td><td><input type="checkbox" name="privateProfile" checked /></td></tr>
+		{% else %}
+		    <tr><td class="label">{{L('private')}}:</td><td><input type="checkbox" name="privateProfile"  /></td></tr>
+		{% endif %}
+
+
+		<tr class="footer"><td class="label"></td><td><input type="submit" value="{{L('save')}}"/></td></tr>
+	</table>
+	<input type="hidden" name="csrf" value="{{csrf}}"/>
+</form>
+<form action="/settings/updateProfilePicture" method="post" enctype="multipart/form-data">
+	<h2>{{L('update_profile_picture')}}</h2>
+	{%if profilePicMessage%}<h5>{{profilePicMessage}}</h5>{%endif%}
+	<table class="form">
+		<tr><td class="label"></td><td><input type="file" name="pic" accept="image/*"/></td></tr>
+		<tr class="footer"><td class="label"></td><td><input type="submit" value="{{L('save')}}"/></td></tr>
+	</table>
+</form>
+<form action="/settings/updatePassword" method="post" onsubmit="return ajaxSubmitForm(this)">
+	<h2>{{L('change_password')}}</h2>
+	<div class="settingsMessage" id="passwordMessage" style="{%if not passwordMessage%}display: none{%endif%}">{{passwordMessage}}</div>
+	<input type="hidden" name="csrf" value="{{csrf}}"/>
+	<table class="form">
+		<tr><td class="label">{{L('current_password')}}:</td><td><input type="password" name="current"/></td></tr>
+		<tr><td class="label">{{L('new_password')}}:</td><td><input type="password" name="new"/></td></tr>
+		<tr><td class="label">{{L('new_password_confirm')}}:</td><td><input type="password" name="new2"/></td></tr>
+		<tr class="footer"><td class="label"></td><td><input type="submit" value="{{L('save')}}"/></td></tr>
+	</table>
+</form>
+<h2>{{L('invitations')}}</h2>
+{%if inviteMessage%}<h5>{{inviteMessage}}</h5>{%endif%}
+<table border="1" width="60%" style="margin: auto">
+	<tr>
+		<th>{{L('invitation_code')}}</th>
+		<th>{{L('created')}}</th>
+	</tr>
+{%for invite in invitations%}
+	<tr>
+		<td><code>{{invite.code}}</code></td>
+		<td>{{LD(invite.createdAt)}}</td>
+	</tr>
+{%endfor%}
+{%if invitations.empty%}
+	<tr>
+		<td align="center" colspan="2">{{L('no_invitations')}}</td>
+	</tr>
+{%endif%}
+</table>
+<form action="/settings/createInvite" method="post">
+	<input type="hidden" name="csrf" value="{{csrf}}"/>
+	<center><input type="submit" value="{{L('create_invitation')}}"/></center>
+</form>
+
+	<h2>{{L('language')}}</h2>
+	<form action="/settings/setLanguage" method="post">
+		<table class="form">
+			<tr><td class="label"></td><td><select name="lang">
+				{%for lang in languages%}
+				<option value="{{lang.locale.toLanguageTag()}}"{%if selectedLang==lang%} selected{%endif%}>{{lang.name}}</option>
+				{%endfor%}
+			</select></td></tr>
+			<tr class="footer"><td class="label"></td><td><input type="submit" value="{{L('save')}}"/></td></tr>
+		</table>
+	</form>
+</div>
+{%endblock%}

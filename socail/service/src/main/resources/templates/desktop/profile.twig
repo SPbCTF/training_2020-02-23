@@ -1,0 +1,60 @@
+{%extends "page.twig"%}
+{%block content%}
+<table width="100%" cellpadding="0" cellspacing="0" class="columnLayout leftNarrow">
+	<tr valign="top">
+		<!-- left column -->
+		<td width="200" id="left">
+			{{user.avatar | pictureForAvatar('l')}}
+			<ul class="actionList marginAfter">
+			{%if currentUser and currentUser.id!=user.id%}
+			{%if isFriend%}
+				<li><a href="/{{user.username}}/confirmRemoveFriend">{{L("remove_friend")}}</a></li>
+			{%else%}
+				<li><a href="/{{user.username}}/confirmSendFriendRequest">{{L("add_friend", user.firstName)}}</a></li>
+			{%endif%}
+			{%endif%}
+				<li><a href="{{user.getProfileURL('followers')}}">{{L('followers')}}</a></li>
+				<li><a href="{{user.getProfileURL('following')}}">{{L('following')}}</a></li>
+			</ul>
+
+			<table width="100%" style="table-layout: fixed;" class="profileBlock">
+				<tr><th colspan="3" class="blockHeader"><a href="{{user.getProfileURL('friends')}}">{{L("friends")}}</a></th></tr>
+				<tr><td colspan="3" class="blockSubheader">{{LP('X_friends', friendCount)}}</td></tr>
+				{%for friend in friends%}
+				{%if(loop.first or loop.index==4)%}<tr valign="top" class="membersRow">{%endif%}
+				<td align="center" width="33%" style="overflow: hidden;">
+					<a href="{{friend.url}}">
+						{{friend.avatar | pictureForAvatar('s')}}<br/>
+						{{friend.firstName}}<br/>{{friend.lastName}}
+					</a>
+				</td>
+				{%if(loop.index==3 or loop.index==6)%}</tr>{%endif%}
+				{%endfor%}
+				{%if(friends.size%3!=0)%}
+				<td colspan="{{3-friends.size%3}}" width="{{(3-friends.size%3)*33}}%">&nbsp;</td></tr>
+				{%endif%}
+			</table>
+		</td>
+		<!-- right column -->
+		<!-- {{ user.id }} -->
+		<td id="right">
+			<h2>{{user.fullName}}</h2>
+			<table class="profileBlock profileFields" width="100%">
+
+				{%if user.birthDate%}<tr><td class="label">{{L("birth_date")}}:</td><td>{{user.birthDate}}</td></tr>{%endif%}
+				{%if user.about %}<tr><td class="label">{{L('profile_about')}}:</td><td>{{user.about}}</td></tr>{%endif%}
+			</table>
+			<table width="100%" class="profileBlock">
+				<tr><th class="blockHeader"><a href="#">{{L('wall')}}</a></th></tr>
+				<tr><td class="blockSubheader">{{LP('X_posts', postCount)}}</td></tr>
+				{%if currentUser%}<tr><td>{%include "wall_post_form.twig" with {wallOwner: user}%}</td></tr>{%endif%}
+				<tr><td class="padded" id="postList">
+			{%for post in wall%}
+			{%include "wall_post.twig" with {post: post}%}
+			{%endfor%}
+				</td></tr>
+			</table>
+		</td>
+	</tr>
+</table>
+{%endblock%}
