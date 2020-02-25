@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My services</title>
+
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <style>
+        main > .container {
+            padding: 60px 15px 0;
+        }
+    </style>
+
+</head>
+<body>
+
+<header>
+    {{ if eq .Version 1 }}
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-danger">
+    {{ else }}
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-info">
+    {{ end }}
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">My services <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/services">All services <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <span class="badge badge-secondary mx-3">version: {{ .Version }}</span>
+            <a class="text-white">@{{.User.Name}} : {{.User.Quota}}</a>
+            <a class="nav-link text-white" href="/logout">Log out<span class="sr-only">(current)</span></a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Address</th>
+                <th scope="col">Port</th>
+                <th scope="col">Health</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{ range $, $service := .Services }}
+            <tr>
+                <th scope="row">{{ $service.Name }}</th>
+                <td>{{ $service.Address }}</td>
+                <td>{{ $service.Port }}</td>
+                {{ if eq $service.Healthy 1 }}
+                    <td><span class="badge badge-success">OK</span></td>
+                {{ else }}
+                    <td><span class="badge badge-danger">Fail</span></td>
+                {{ end }}
+            </tr>
+            {{ end }}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<script src="/static/jquery-3.4.1.slim.min.js"></script>
+<script src="/static/popper.min.js"></script>
+<script src="/static/bootstrap.min.js"></script>
+</body>
+</html>

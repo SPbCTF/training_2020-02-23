@@ -1,0 +1,12 @@
+FROM golang:1.13.4 as builder
+ENV GOPATH /go
+ENV CGO_ENABLED 1
+
+WORKDIR $GOPATH/src/backend
+COPY . .
+RUN go build -mod=vendor -ldflags "-linkmode external -extldflags '-static' -s -w" -o /go/bin/backend
+
+FROM scratch
+COPY --from=builder /go/bin/backend /backend
+COPY frontend frontend
+ENTRYPOINT ["/backend"]
