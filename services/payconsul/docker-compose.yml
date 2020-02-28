@@ -1,0 +1,37 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./storage.db:/storage/storage.db"
+      - "./static:/static:ro"
+    ports:
+      - 40000:80
+
+  backend1:
+    build:
+      context: ./backend/
+      dockerfile: ../Dockerfile.backend
+    environment:
+      - ID=1
+      - LISTEN=:80
+      - DSN=/storage/storage.db
+    volumes:
+      - "./storage.db:/storage/storage.db"
+      - "./checker_token:/token:ro"
+
+  backend2:
+    build:
+      context: ./backend/
+      dockerfile: ../Dockerfile.backend
+    environment:
+      - ID=2
+      - LISTEN=:80
+      - DSN=/storage/storage.db
+    volumes:
+      - "./storage.db:/storage/storage.db"
+      - "./checker_token:/token:ro"
+

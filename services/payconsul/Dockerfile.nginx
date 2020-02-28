@@ -1,0 +1,5 @@
+FROM firesh/nginx-lua
+
+RUN apk add lua lua-dev unzip lua5.1-sqlite
+RUN mkdir /storage
+RUN chmod -R 777 /storage
