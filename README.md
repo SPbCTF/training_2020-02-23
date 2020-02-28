@@ -7,7 +7,7 @@
 | Сервис | Язык | Автор | Сервис | Чекер |
 |--------|------|-------|--------|-------|
 | **payconsul** | Go | [Роман Опякин](https://github.com/Sinketsu) | [Сервис](services/payconsul/) | [Чекер](checkers/payconsul/) |
-| **socail** | Java | [Толя Корнильцев](https://github.com/korniltsev) | [Сервис](services/socail/) | [Чекер](checkers/socail/) |
+| **socail** | Kotlin | [Толя Корнильцев](https://github.com/korniltsev) | [Сервис](services/socail/) | [Чекер](checkers/socail/) |
 | **sunrise** | C | [Артур Ханов](https://github.com/awengar) | [Сервис](services/sunrise/) | [Чекер](checkers/sunrise/) |
 
 ## Лицензия
