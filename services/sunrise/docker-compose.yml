@@ -1,0 +1,17 @@
+version: '2.1'
+
+services:
+  sunrise:
+    build: .
+    restart: unless-stopped
+    pids_limit: 500
+    image: sunrise
+    volumes:
+      - ./service/:/home/task
+    ports:
+      - 3771:3771
+    ulimits:
+       nproc: 500
+       nofile:
+          soft: 2000
+          hard: 4000
